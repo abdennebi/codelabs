@@ -1,3 +1,9 @@
+locals {
+  tag_allow_iap = "allow-iap"
+  tag_allow_healthcheck = "allow-healthcheck"
+}
+
+
 resource "google_compute_instance" "www_01" {
   name         = "www-01"
   machine_type = "e2-medium"
@@ -12,6 +18,8 @@ resource "google_compute_instance" "www_01" {
   network_interface {
     subnetwork = google_compute_subnetwork.region_1.name
   }
+
+  tags = [local.tag_allow_healthcheck]
 
   metadata_startup_script = <<EOT
   #! /bin/bash
@@ -37,6 +45,8 @@ resource "google_compute_instance" "www_02" {
       image = "debian-cloud/debian-11"
     }
   }
+
+  tags = [local.tag_allow_healthcheck]
 
   network_interface {
     subnetwork = google_compute_subnetwork.region_2.name
@@ -96,6 +106,9 @@ resource "google_compute_instance" "client" {
   network_interface {
     subnetwork = google_compute_subnetwork.region_1.name
   }
+
+  tags = [local.tag_allow_iap]
+
 
   metadata_startup_script = <<EOT
   #! /bin/bash

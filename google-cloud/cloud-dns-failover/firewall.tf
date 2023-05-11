@@ -19,6 +19,8 @@ resource "google_compute_firewall" "allow-hcs" {
     metadata = "EXCLUDE_ALL_METADATA"
   }
 
+  target_tags = [local.tag_allow_healthcheck]
+
   source_ranges = data.google_netblock_ip_ranges.legacy-hcs.cidr_blocks_ipv4
 }
 
@@ -36,6 +38,8 @@ resource "google_compute_firewall" "allow-iap" {
   log_config {
     metadata = "EXCLUDE_ALL_METADATA"
   }
+
+  target_tags = [local.tag_allow_iap]
 
   source_ranges = data.google_netblock_ip_ranges.iap.cidr_blocks_ipv4
 }
