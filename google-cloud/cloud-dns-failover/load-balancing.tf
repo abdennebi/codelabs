@@ -13,7 +13,7 @@ resource "google_compute_health_check" "http_health_check" {
 resource "google_compute_region_backend_service" "region1" {
   name          = "backend-service"
   health_checks = [google_compute_health_check.http_health_check.id]
-  region = var.region_1
+  region        = var.region_1
   backend {
     group = google_compute_instance_group.ig-www-region1.id
   }
@@ -28,7 +28,7 @@ resource "google_compute_region_backend_service" "region1" {
 resource "google_compute_region_backend_service" "region2" {
   name          = "backend-service"
   health_checks = [google_compute_health_check.http_health_check.id]
-  region = var.region_2
+  region        = var.region_2
 
   backend {
     group = google_compute_instance_group.ig-www-region2.id
@@ -42,28 +42,36 @@ resource "google_compute_region_backend_service" "region2" {
 }
 
 
+resource "google_compute_address" "lb_ip_region1" {
+  name         = "lb-ip-${var.region_1}"
+  subnetwork   = google_compute_subnetwork.region_1.id
+  address_type = "INTERNAL"
+  region       = var.region_1
+}
 
-#resource "google_compute_address" "lb_ip" {
-#  name         = "lb-ip"
-#  subnetwork   = google_compute_subnetwork.producer_euw1.name
-#  address_type = "INTERNAL"
-#  address      = "10.0.2.10"
-#}
+resource "google_compute_address" "lb_ip_region2" {
+  name         = "lb-ip-${var.region_2}"
+  subnetwork   = google_compute_subnetwork.region_2.id
+  address_type = "INTERNAL"
+  region       = var.region_2
+}
 
 resource "google_compute_forwarding_rule" "region1" {
   name                  = "www-ilb-tcp-${var.region_1}"
-#  ip_address            = google_compute_address.lb_ip.id
+  ip_address            = google_compute_address.lb_ip_region1.id
   backend_service       = google_compute_region_backend_service.region1.id
   load_balancing_scheme = "INTERNAL"
+  network               = google_compute_network.app.id
   subnetwork            = google_compute_subnetwork.region_1.name
   ip_protocol           = "TCP"
   all_ports             = true
   region                = var.region_1
+  allow_global_access   = true
 }
 
 resource "google_compute_forwarding_rule" "region2" {
   name                  = "www-ilb-tcp-${var.region_2}"
-  #  ip_address            = google_compute_address.lb_ip.id
+  ip_address            = google_compute_address.lb_ip_region2.id
   backend_service       = google_compute_region_backend_service.region2.id
   load_balancing_scheme = "INTERNAL"
   subnetwork            = google_compute_subnetwork.region_2.name
