@@ -6,13 +6,13 @@
 resource "google_compute_router" "nat_region1" {
   name    = "nat-cloud-router-${var.region_1}"
   network = google_compute_network.app.name
-  region = var.region_1
+  region  = var.region_1
 }
 
 resource "google_compute_router" "nat_region2" {
   name    = "nat-cloud-router-${var.region_2}"
   network = google_compute_network.app.name
-  region = var.region_2
+  region  = var.region_2
 }
 
 resource "google_compute_router_nat" "nat_region1" {
