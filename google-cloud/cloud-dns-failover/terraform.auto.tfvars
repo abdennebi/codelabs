@@ -1,4 +1,4 @@
-project_id = "k8s-istio-playground"
+project_id = ""
 
 region_1      = "europe-west1"
 region_1_zone = "europe-west1-b"
