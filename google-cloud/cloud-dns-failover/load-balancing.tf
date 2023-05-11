@@ -66,6 +66,7 @@ resource "google_compute_forwarding_rule" "region1" {
   ip_protocol           = "TCP"
   all_ports             = true
   region                = var.region_1
+  # It's mandatory to enable global access : https://cloud.google.com/load-balancing/docs/internal/setting-up-internal#ilb-global-access
   allow_global_access   = true
 }
 
