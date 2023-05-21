@@ -1,9 +1,6 @@
 resource "google_compute_health_check" "http_health_check" {
   name = "http-health-check"
 
-  timeout_sec        = 1
-  check_interval_sec = 1
-
   http_health_check {
     port_name = "http"
     port      = 80
