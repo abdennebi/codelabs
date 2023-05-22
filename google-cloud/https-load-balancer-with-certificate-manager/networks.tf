@@ -7,11 +7,9 @@ resource "google_compute_network" "app" {
 resource "google_compute_subnetwork" "app" {
   name          = "app"
   ip_cidr_range = "10.0.1.0/24"
-  region        = "us-central1"
+  region        = var.region
   network       = google_compute_network.app.id
 }
-
-
 
 resource "google_compute_firewall" "health-check" {
   name          = "allow-health-check"
