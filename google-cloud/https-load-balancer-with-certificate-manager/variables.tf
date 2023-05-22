@@ -6,6 +6,6 @@ variable "region" {
   type = string
 }
 
-variable "domains" {
-  type = list(string)
+variable "domain" {
+  type = string
 }
